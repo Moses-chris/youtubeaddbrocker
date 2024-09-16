@@ -1,0 +1,44 @@
+{
+    "manifest_version": 3,
+    "name": "Advanced YouTube Ad Blocker",
+    "version": "1.0",
+    "description": "An advanced ad blocker for YouTube with multiple blocking strategies.",
+    "permissions": [
+      "declarativeNetRequest",
+      "declarativeNetRequestWithHostAccess",
+      "activeTab",
+      "storage"
+    ],
+    "host_permissions": [
+      "https://www.youtube.com/*",
+      "https://*.googlevideo.com/*",
+      "https://www.googleapis.com/*",
+      "https://*.doubleclick.net/*",
+      "https://*.googlesyndication.com/*"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["*://www.youtube.com/*"],
+        "js": ["content.js"],
+        "run_at": "document_start"
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["injected.js"],
+        "matches": ["*://www.youtube.com/*"]
+      }
+    ],
+    "declarative_net_request": {
+      "rule_resources": [
+        {
+          "id": "ruleset_1",
+          "enabled": true,
+          "path": "rules.json"
+        }
+      ]
+    }
+  }
