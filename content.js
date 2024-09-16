@@ -4,8 +4,8 @@
     function removeAds() {
       if (!enabled) return;
   
-      const adElements = document.querySelectorAll('.ad-showing, .ytp-ad-module, .video-ads, .ytp-ad-overlay-container');
-      adElements.forEach(ad => ad.remove());
+      const adElements = document.querySelectorAll('.ad-showing, .ytp-ad-module, .video-ads');
+      adElements.forEach(ad => ad.style.display = 'none');
   
       const skipButton = document.querySelector('.ytp-ad-skip-button');
       if (skipButton) skipButton.click();
@@ -18,24 +18,21 @@
       const script = document.createElement('script');
       script.setAttribute('type', 'text/javascript');
       script.setAttribute('src', chrome.runtime.getURL(file));
-      document.documentElement.appendChild(script);
+      document.head.appendChild(script);
     }
   
     chrome.runtime.sendMessage({ action: "getState" }, (response) => {
       enabled = response.enabled;
       if (enabled) {
         injectScript('injected.js');
-        setInterval(removeAds, 100);
+        const observer = new MutationObserver(removeAds);
+        observer.observe(document.body, { childList: true, subtree: true });
       }
     });
   
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.action === "stateChanged") {
         enabled = request.enabled;
-        if (enabled) {
-          injectScript('injected.js');
-          setInterval(removeAds, 100);
-        }
       }
     });
   })();
