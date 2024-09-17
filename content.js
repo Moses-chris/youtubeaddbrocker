@@ -15,7 +15,13 @@
       '.ytd-banner-promo-renderer',
       'ytd-display-ad-renderer',
       'ytd-statement-banner-renderer',
-      'ytd-in-feed-ad-layout-renderer'
+      'ytd-in-feed-ad-layout-renderer',
+      'ytd-ad-slot-renderer',
+      'ytd-promoted-video-renderer',
+      '.ytd-watch-next-secondary-results-renderer.sparkles-light-cta',
+      '.ytd-merch-shelf-renderer',
+      'ytd-compact-promoted-video-renderer',
+      '.ytd-primetime-promo-renderer'
     ];
 
     adSelectors.forEach(selector => {
@@ -23,13 +29,24 @@
       elements.forEach(el => el.remove());
     });
 
-    const skipButton = document.querySelector('.ytp-ad-skip-button');
-    if (skipButton) skipButton.click();
+    // Handle dynamic ad insertions
+    const handleAdInsertions = () => {
+      const adElement = document.querySelector('.ad-showing');
+      if (adElement) {
+        const video = document.querySelector('video');
+        if (video) {
+          video.currentTime = video.duration;
+        }
+      }
 
-    const video = document.querySelector('video');
-    if (video && document.querySelector('.ad-showing')) {
-      video.currentTime = video.duration;
-    }
+      const skipButton = document.querySelector('.ytp-ad-skip-button');
+      if (skipButton) {
+        skipButton.click();
+      }
+    };
+
+    // Run handleAdInsertions every 500ms
+    setInterval(handleAdInsertions, 500);
   }
 
   function injectScript(file) {
@@ -58,13 +75,16 @@
       injectScript('injected.js');
       removeAds();
       observePageChanges();
-      setInterval(removeAds, 1000);
     }
   });
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "stateChanged") {
       enabled = request.enabled;
+      if (enabled) {
+        removeAds();
+        observePageChanges();
+      }
     }
   });
 })();

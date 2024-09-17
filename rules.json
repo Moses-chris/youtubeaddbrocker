@@ -23,7 +23,7 @@
     "action": { "type": "block" },
     "condition": {
       "urlFilter": "||doubleclick.net/*",
-      "resourceTypes": ["script", "image", "xmlhttprequest"]
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame"]
     }
   },
   {
@@ -32,7 +32,7 @@
     "action": { "type": "block" },
     "condition": {
       "urlFilter": "||googlesyndication.com/*",
-      "resourceTypes": ["script", "image", "xmlhttprequest"]
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame"]
     }
   },
   {
@@ -50,6 +50,24 @@
     "action": { "type": "block" },
     "condition": {
       "urlFilter": "||youtube.com/ptracking",
+      "resourceTypes": ["xmlhttprequest"]
+    }
+  },
+  {
+    "id": 7,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "*googlevideo.com/videoplayback*&adformat=*",
+      "resourceTypes": ["xmlhttprequest", "media"]
+    }
+  },
+  {
+    "id": 8,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||youtube.com/api/stats/qoe",
       "resourceTypes": ["xmlhttprequest"]
     }
   }

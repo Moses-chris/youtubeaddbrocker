@@ -5,20 +5,26 @@
       if (args[0].includes('youtubei/v1/player') || args[0].includes('youtubei/v1/next')) {
         return originalFetch.apply(this, args).then(response => 
           response.clone().json().then(data => {
-            if (data.adPlacements) data.adPlacements = [];
-            if (data.playerAds) data.playerAds = [];
-            if (data.adSlots) data.adSlots = [];
-            if (data.adBreakHeartbeatParams) data.adBreakHeartbeatParams = undefined;
-            if (data.adBreakParams) data.adBreakParams = undefined;
-            
-            if (data.streamingData && data.streamingData.adBreakTimings) {
-              data.streamingData.adBreakTimings = [];
-            }
+            // Remove all ad-related data
+            const removeAdsRecursively = (obj) => {
+              if (Array.isArray(obj)) {
+                return obj.map(removeAdsRecursively).filter(item => item !== null);
+              } else if (typeof obj === 'object' && obj !== null) {
+                Object.keys(obj).forEach(key => {
+                  if (key.toLowerCase().includes('ad') || key.toLowerCase().includes('sponsor')) {
+                    delete obj[key];
+                  } else {
+                    obj[key] = removeAdsRecursively(obj[key]);
+                  }
+                });
+              }
+              return obj;
+            };
 
+            data = removeAdsRecursively(data);
+
+            // Ensure video plays without ads
             if (data.videoDetails) {
-              data.videoDetails.allowedToBeEmbed = true;
-              data.videoDetails.isPrivate = false;
-              data.videoDetails.isUnpluggedCorpus = false;
               data.videoDetails.isLiveContent = false;
             }
 
@@ -34,6 +40,7 @@
     return originalFetch.apply(this, args);
   };
 
+  // Override XMLHttpRequest
   const XHR = XMLHttpRequest.prototype;
   const open = XHR.open;
   const send = XHR.send;
