@@ -1,44 +1,41 @@
 {
-    "manifest_version": 3,
-    "name": "Advanced YouTube Ad Blocker",
-    "version": "1.0",
-    "description": "An advanced ad blocker for YouTube with multiple blocking strategies.",
-    "permissions": [
-      "declarativeNetRequest",
-      "declarativeNetRequestWithHostAccess",
-      "activeTab",
-      "storage"
-    ],
-    "host_permissions": [
-      "https://www.youtube.com/*",
-      "https://*.googlevideo.com/*",
-      "https://www.googleapis.com/*",
-      "https://*.doubleclick.net/*",
-      "https://*.googlesyndication.com/*"
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "content_scripts": [
-      {
-        "matches": ["*://www.youtube.com/*"],
-        "js": ["content.js"],
-        "run_at": "document_start"
-      }
-    ],
-    "web_accessible_resources": [
-      {
-        "resources": ["injected.js"],
-        "matches": ["*://www.youtube.com/*"]
-      }
-    ],
-    "declarative_net_request": {
-      "rule_resources": [
-        {
-          "id": "ruleset_1",
-          "enabled": true,
-          "path": "rules.json"
-        }
-      ]
+  "manifest_version": 3,
+  "name": "YouTube Ad Blocker Pro",
+  "version": "1.0",
+  "description": "An efficient ad blocker for YouTube that removes video and feed ads without impacting performance.",
+  "permissions": [
+    "storage",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.googlevideo.com/*",
+    "*://*.doubleclick.net/*",
+    "*://*.googleadservices.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
     }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": ["*://*.youtube.com/*"]
+    }
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
   }
+}
