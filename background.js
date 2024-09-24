@@ -3,16 +3,81 @@ chrome.runtime.onInstalled.addListener(() => {
 
   // Set up declarativeNetRequest rules
   chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [1],  // Remove any existing rule with ID 1
-    addRules: [{
-      id: 1,
-      priority: 1,
-      action: { type: "block" },
-      condition: {
-        urlFilter: "*googlevideo.com/videoplayback*&adformat=*",
-        resourceTypes: ["xmlhttprequest"]
+    removeRuleIds: [1, 2, 3, 4, 5, 6, 7, 8],  // Remove any existing rules
+    addRules: [
+      {
+        id: 1,
+        priority: 1,
+        action: { type: "block" },
+        condition: {
+          urlFilter: "*googlevideo.com/videoplayback*&adformat=*",
+          resourceTypes: ["xmlhttprequest"]
+        }
+      },
+      {
+        id: 2,
+        priority: 1,
+        action: { type: "block" },
+        condition: {
+          urlFilter: "||youtube.com/get_video_info",
+          resourceTypes: ["xmlhttprequest"]
+        }
+      },
+      {
+        id: 3,
+        priority: 1,
+        action: { type: "block" },
+        condition: {
+          urlFilter: "||youtube.com/api/stats/ads",
+          resourceTypes: ["xmlhttprequest"]
+        }
+      },
+      {
+        id: 4,
+        priority: 1,
+        action: { type: "block" },
+        condition: {
+          urlFilter: "||doubleclick.net/*",
+          resourceTypes: ["script", "image", "xmlhttprequest", "sub_frame"]
+        }
+      },
+      {
+        id: 5,
+        priority: 1,
+        action: { type: "block" },
+        condition: {
+          urlFilter: "||googlesyndication.com/*",
+          resourceTypes: ["script", "image", "xmlhttprequest", "sub_frame"]
+        }
+      },
+      {
+        id: 6,
+        priority: 1,
+        action: { type: "block" },
+        condition: {
+          urlFilter: "||youtube.com/pagead/*",
+          resourceTypes: ["script", "xmlhttprequest"]
+        }
+      },
+      {
+        id: 7,
+        priority: 1,
+        action: { type: "block" },
+        condition: {
+          urlFilter: "||youtube.com/ptracking",
+          resourceTypes: ["xmlhttprequest"]
+        }
+      },
+      {
+        id: 8,
+        priority: 1,
+        action: { type: "block" },
+        condition: {
+          urlFilter: "||youtube.com/api/stats/qoe",
+          resourceTypes: ["xmlhttprequest"]
+        }
       }
-    }]
+    ]
   });
 });
 
